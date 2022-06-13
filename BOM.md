@@ -1,7 +1,7 @@
 ### Controller
 
-- Microconroller
-	- Compatible with Arduino WiFiNINA?
+- Microconroller = [Arduino Nano 33 IoT][nano-33]
+	- Compatible with Arduino WiFiNINA
 - Power
 	- Solar
 	- Battery
@@ -16,3 +16,6 @@
 - Solar / UV
 - Air Quality
 - Camrea?
+
+
+[nano-33]: https://store-usa.arduino.cc/products/arduino-nano-33-iot
