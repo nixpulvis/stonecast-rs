@@ -19,3 +19,8 @@
 
 
 [nano-33]: https://store-usa.arduino.cc/products/arduino-nano-33-iot
+
+### Contributors
+
+Nathan Lilienthal
+Cory Finger
