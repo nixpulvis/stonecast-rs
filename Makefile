@@ -1,4 +1,4 @@
-PORT := /dev/tty.usbmodem144401
+PORT := $(shell (ls /dev/*modem* || ls /dev/*ACM*) | head -n 1)
 
 build:
 	cargo build --release
