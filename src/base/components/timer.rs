@@ -4,6 +4,20 @@ use bsp::hal::clock::{GClock, GenericClockController};
 use bsp::hal::prelude::*;
 use bsp::hal::timer::{TimerCounter, TimerCounter5};
 
+macro_rules! from {
+    ($stone:expr) => { {
+        let gclk0 = $stone.clock.gclk0();
+
+        base::components::timer::Timer::new(
+            $stone.tc5,
+            &mut $stone.clock,
+            &gclk0,
+            &mut $stone.pm
+        )
+    } };
+}
+pub(crate) use from;
+
 pub struct Timer {
     tc: TimerCounter5,
     millis: u64,

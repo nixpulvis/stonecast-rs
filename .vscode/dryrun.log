@@ -1,0 +1,4 @@
+make: Entering directory `/Users/coryfinger/Documents/Arduino/rust/stonecast'
+cargo build --release
+make: Leaving directory `/Users/coryfinger/Documents/Arduino/rust/stonecast'
+ 

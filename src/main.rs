@@ -2,71 +2,27 @@
 #![no_main]
 
 use panic_halt as _;
-use arduino_nano33iot as bsp;
-use bsp::entry;
-use bsp::hal;
-use hal::clock::GenericClockController;
-use hal::pac::Peripherals;
-use hal::prelude::*;
-use atsamd21g::*;
 
-mod time;
-use time::Timer;
-
-struct Stone {
-    /// Power manager
-    PM: PM,
-    /// System control
-    SYSCTRL: SYSCTRL,
-    /// Non-volitile memory controller
-    NVMCTRL: NVMCTRL,
-    /// Clock
-    CLOCK: GenericClockController,
-    /// Timer(s)
-    TIMER: Timer,
-    /// On device LED
-    LED: bsp::Led,
-}
-
-impl Stone {
-    fn new() -> Stone {
-        let mut peripherals = Peripherals::take().unwrap();
-
-        let mut clocks = GenericClockController::with_internal_32kosc(
-            peripherals.GCLK,
-            &mut peripherals.PM,
-            &mut peripherals.SYSCTRL,
-            &mut peripherals.NVMCTRL);
-
-        let gclk0 = clocks.gclk0();
-        let timer = Timer::new(peripherals.TC5, &mut clocks, &gclk0, &mut peripherals.PM);
-
-        let pins = bsp::Pins::new(peripherals.PORT);
-        let led = pins.led_sck.into();
-
-        Stone {
-            PM: peripherals.PM,
-            SYSCTRL: peripherals.SYSCTRL,
-            NVMCTRL: peripherals.NVMCTRL,
-            CLOCK: clocks,
-            TIMER: timer,
-            LED: led,
-        }
-    }
-}
+mod base;
+use base::{entry, Stone};
+use base::components::{built_in_led, timer, digital_pins};
+use digital_pins::DigitalOutputPin;
 
 #[entry]
 fn main() -> ! {
-    let mut stone = Stone::new();
-    let mut led_last_toggled = stone.TIMER.millis();
+    let mut stone = Stone::instance();
+    let mut timer = timer::from!(stone);
+    let mut built_in_led = built_in_led::from!(stone);
+    let mut ext_led = digital_pins::get_output!(stone, d10);
+    built_in_led.set_high();
 
-    stone.LED.set_high().unwrap();
-
+    let mut led_last_toggled = timer.millis();
     loop {
-        stone.TIMER.tick();
-        let now = stone.TIMER.millis();
+        timer.tick();
+        let now = timer.millis();
         if 500 < (now - led_last_toggled) {
-            stone.LED.toggle().unwrap();
+            built_in_led.toggle();
+            ext_led.toggle();
             led_last_toggled = now;
         }
     }
