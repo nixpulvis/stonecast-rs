@@ -380,6 +380,7 @@ name = "stonecast"
 version = "0.1.0"
 dependencies = [
  "arduino_nano33iot",
+ "atsamd21g",
  "cortex-m",
  "lexical-core",
  "lsm6ds33",

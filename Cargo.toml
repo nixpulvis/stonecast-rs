@@ -12,6 +12,8 @@ usbd-serial = "0.1"
 usb-device = "0.2"
 lsm6ds33 = "0.2"
 
+atsamd21g = "*"
+
 [dependencies.arduino_nano33iot]
 version = "0.7.0"
 features = ["unproven", "usb"]
