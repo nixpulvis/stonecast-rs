@@ -4,26 +4,31 @@
 use panic_halt as _;
 
 mod base;
+use base::prelude::*;
 use base::{entry, Stone};
-use base::components::{built_in_led, timer, digital_pins};
-use digital_pins::DigitalOutputPin;
+use base::components::{digital_pins, analog_pins, usb_logger};
 
 #[entry]
 fn main() -> ! {
-    let mut stone = Stone::instance();
-    let mut timer = timer::from!(stone);
-    let mut built_in_led = built_in_led::from!(stone);
-    let mut ext_led = digital_pins::get_output!(stone, d10);
-    built_in_led.set_high();
+    let mut stone = Stone::take();
+    let usb_logger = usb_logger::from!(stone);
 
-    let mut led_last_toggled = timer.millis();
+    let mut built_in_led = indicators::built_in_led::from!(stone);
+    let mut ext_led = indicators::external_led::from!(stone, d10);
+    let mut temp_sensor = sensors::temperature::from!(stone, a0);
+    let mut msg_buf = msg_buffer::buffer_of_size!(100);
+    
+    // Just give some time for the serial monitor to start listening...
+    stone.delay.delay_ms(500u32);
+    msg_buffer::log_to!(usb_logger, "Initialized!!!\n");
+
     loop {
-        timer.tick();
-        let now = timer.millis();
-        if 500 < (now - led_last_toggled) {
-            built_in_led.toggle();
-            ext_led.toggle();
-            led_last_toggled = now;
-        }
+        built_in_led.blink(&mut stone.delay).unwrap();
+        ext_led.blink(&mut stone.delay).unwrap();
+
+        let temp_val = temp_sensor.get_temperature(&mut stone.adc).unwrap_or(0f32);
+        msg_buffer::log_to_fmt!(msg_buf, usb_logger, "Temperature: {}\n", temp_val);
+        
+        stone.delay.delay_ms(200u32);
     }
 }

@@ -18,6 +18,9 @@ atsamd21g = "*"
 version = "0.7.0"
 features = ["unproven", "usb"]
 
+[dependencies.display_utils]
+version = "0.4.0"
+
 [dependencies.lexical-core]
 version = "0.8"
 default-features = false
