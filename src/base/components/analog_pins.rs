@@ -17,9 +17,8 @@ macro_rules! is_analog_input {
     ($d_id:ident, $port:ident) => {
         impl<'a, I, M> AnalogPin<Pin<I, M>>
         where I: PinId, M: PinMode {
-            pub fn $d_id(pin: Pin<I, M>) -> AnalogPin<Pin<I, AlternateB>> {
-                let alternate_pin: Pin<I, AlternateB> = pin.into_alternate();
-                AnalogPin{pin: alternate_pin}
+            pub fn $d_id(pin: Pin<I, M>) -> AnalogPin<Pin<I, Alternate<B>>> {
+                AnalogPin{pin: pin.into_alternate()}
             }
         }
 

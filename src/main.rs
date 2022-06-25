@@ -26,8 +26,14 @@ fn main() -> ! {
         built_in_led.blink(&mut stone.delay).unwrap();
         ext_led.blink(&mut stone.delay).unwrap();
 
-        let temp_val = temp_sensor.get_temperature(&mut stone.adc).unwrap_or(0f32);
-        msg_buffer::log_to_fmt!(msg_buf, usb_logger, "Temperature: {}\n", temp_val);
+        let temp_val = temp_sensor.get_temperature_f(&mut stone.adc).unwrap_or(0f32);
+        if temp_val > 70.0 {
+            ext_led.set_high().unwrap();
+        } else {
+            ext_led.set_low().unwrap();
+        }
+
+        msg_buffer::log_to_fmt!(msg_buf, usb_logger, "Temperature: {} degrees fahrenheit\n", temp_val);
         
         stone.delay.delay_ms(200u32);
     }
