@@ -20,7 +20,6 @@ impl<C> TemperatureSensor<C> {
 }
 
 impl<C> TemperatureSensor<C> where C: AnalogInput {
-
     pub fn get_temperature(&mut self, adc: &mut Adc<atsamd21g::ADC>) -> Result<f32, PinError> {
         return match self.pin.read(adc) {
             Ok(val) => Ok(val as f32),
