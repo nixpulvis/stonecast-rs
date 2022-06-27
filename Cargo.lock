@@ -128,6 +128,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "display_utils"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c1cabb9d45c20801e16b8483e998bd1ebe4a07bc56406135ded5b4e3ad140c30"
+
+[[package]]
 name = "either"
 version = "1.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -380,7 +386,9 @@ name = "stonecast"
 version = "0.1.0"
 dependencies = [
  "arduino_nano33iot",
+ "atsamd21g",
  "cortex-m",
+ "display_utils",
  "lexical-core",
  "lsm6ds33",
  "panic-halt",
