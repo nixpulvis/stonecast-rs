@@ -31,15 +31,15 @@ impl<C> TemperatureSensor<C> {
 
 fn translate_temp_f(temp: f32) -> f32 {
     let actual_voltage_mhz = (temp / MAX_SIGNAL) * MAX_VOLTAGE;
-  
+
     // Now we'll convert the voltage to degrees Celsius.
     // This formula comes from the temperature sensor datasheet:
-  
+
     let degrees_c = (actual_voltage_mhz - 500.0) / 10.0;
-    
+
     // While we're at it, let's convert degrees Celsius to Fahrenheit.
     // This is the classic C to F conversion formula:
-    
+
     let degrees_f = degrees_c * (9.0/5.0) + 32.0;
 
     return degrees_f;

@@ -17,7 +17,7 @@ fn main() -> ! {
     let mut ext_led = indicators::external_led::from!(stone, d10);
     let mut temp_sensor = sensors::temperature::from!(stone, a0);
     let mut msg_buf = msg_buffer::buffer_of_size!(100);
-    
+
     // Just give some time for the serial monitor to start listening...
     stone.delay.delay_ms(500u32);
     msg_buffer::log_to!(usb_logger, "Initialized!!!\n");
@@ -34,7 +34,7 @@ fn main() -> ! {
         }
 
         msg_buffer::log_to_fmt!(msg_buf, usb_logger, "Temperature: {} degrees fahrenheit\n", temp_val);
-        
+
         stone.delay.delay_ms(200u32);
     }
 }

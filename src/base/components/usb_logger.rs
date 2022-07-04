@@ -61,7 +61,7 @@ impl USBLogger {
                     .device_class(USB_CLASS_CDC)
                     .build(),
             );
-            
+
             nvic.set_priority(interrupt::USB, 1);
             // Enable the interrupt in the NVIC.
             NVIC::unmask(interrupt::USB);
