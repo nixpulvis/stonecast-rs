@@ -13,8 +13,8 @@ fn main() -> ! {
     let mut stone = Stone::take();
     let usb_logger = usb_logger::from!(stone);
 
-    let mut built_in_led = indicators::built_in_led::from!(stone);
-    let mut ext_led = indicators::external_led::from!(stone, d10);
+    let mut built_in_led = indicators::led::from!(stone, led_sck);
+    let mut ext_led = indicators::led::from!(stone, d10);
     let mut temp_sensor = sensors::temperature::from!(stone, a0);
     let mut msg_buf = msg_buffer::buffer_of_size!(100);
 
@@ -24,7 +24,7 @@ fn main() -> ! {
 
     loop {
         built_in_led.blink(&mut stone.delay).unwrap();
-        ext_led.blink(&mut stone.delay).unwrap();
+        // ext_led.blink(&mut stone.delay).unwrap();
 
         let temp_val = temp_sensor.get_temperature_f(&mut stone.adc).unwrap_or(0f32);
         if temp_val > 70.0 {

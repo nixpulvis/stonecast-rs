@@ -7,26 +7,29 @@ use crate::base::components::error::PinError;
 macro_rules! from {
     ($stone:expr, $pin: ident) => {{
         let pin = digital_pins::push_pull_output!($stone, $pin);
-        indicators::ExternalLED::new(pin)
+        indicators::Led::new(pin)
     }};
 }
 pub(crate) use from;
 
-pub struct ExternalLED<C> {
+pub struct Led<C> {
     pub pin: DigitalPin<C>
 }
 
-impl<C> ExternalLED<C> where C: ToggleableOutputPin + OutputPin {
-    pub fn new(pin: DigitalPin<C>) -> ExternalLED<C> {
-        ExternalLED{pin: pin}
+impl<C> Led<C> where C: ToggleableOutputPin + OutputPin {
+    pub fn new(pin: DigitalPin<C>) -> Led<C> {
+        Led { pin: pin }
     }
 
     pub fn blink(&mut self, delay: &mut Delay) -> Result<(), PinError> {
+        delay.delay_ms(1000u16);
         let mut result = self.pin.toggle();
 
-        if result.is_ok() { delay.delay_ms(1000u16); }
-        if result.is_ok() { result = self.pin.toggle(); }
-        if result.is_ok() { delay.delay_ms(1000u16); }
+        if result.is_ok() {
+            delay.delay_ms(1000u16);
+            result = self.pin.toggle();
+        }
+
         return result;
     }
 
